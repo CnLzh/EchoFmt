@@ -1,0 +1,22 @@
+cmake_minimum_required( VERSION 3.28.4 )
+set(CMAKE_SYSTEM_NAME Linux )
+
+SET (CMAKE_C_COMPILER             "/usr/bin/clang-18")
+SET (CMAKE_C_FLAGS                "-Wall -stdlib=libc")
+SET (CMAKE_C_FLAGS_DEBUG          "-g")
+SET (CMAKE_C_FLAGS_MINSIZEREL     "-Os -DNDEBUG")
+SET (CMAKE_C_FLAGS_RELEASE        "-O3 -DNDEBUG")
+SET (CMAKE_C_FLAGS_RELWITHDEBINFO "-O2 -g")
+
+SET (CMAKE_CXX_COMPILER             "/usr/bin/clang++-18")
+SET (CMAKE_CXX_FLAGS                "-Wall -stdlib=libc++")
+SET (CMAKE_CXX_FLAGS_DEBUG          "-g")
+SET (CMAKE_CXX_FLAGS_MINSIZEREL     "-Os -DNDEBUG")
+SET (CMAKE_CXX_FLAGS_RELEASE        "-O3 -DNDEBUG")
+SET (CMAKE_CXX_FLAGS_RELWITHDEBINFO "-O2 -g")
+
+SET (CMAKE_AR      "/usr/bin/llvm-ar-18")
+SET (CMAKE_LINKER  "/usr/bin/lld-18")
+SET (CMAKE_NM      "/usr/bin/llvm-nm-18")
+SET (CMAKE_OBJDUMP "/usr/bin/llvm-objdump-18")
+SET (CMAKE_RANLIB  "/usr/bin/llvm-ranlib-18")
