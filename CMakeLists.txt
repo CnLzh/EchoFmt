@@ -56,6 +56,7 @@ if (ECHOFMT_BUILD_TESTS)
     endif (NOT BUILD_SHARED_LIBS)
 endif (ECHOFMT_BUILD_TESTS)
 
+# benchamrk
 if (ECHOFMT_BUILD_BENCHMARKS)
     # 使用交叉编译工具链时避免benchmark中cxx_feature_check导致的警告
     include(CheckCXXSourceCompiles)
@@ -123,3 +124,11 @@ if (ECHOFMT_BUILD_BENCHMARKS)
         target_link_libraries(echo_fmt_benchmark gmock gtest benchmark)
     endif (NOT BUILD_SHARED_LIBS)
 endif (ECHOFMT_BUILD_BENCHMARKS)
+
+# library
+add_library(echofmt INTERFACE)
+add_library(echofmt::echofmt ALIAS echofmt)
+target_include_directories(echofmt
+        INTERFACE
+        "$<BUILD_INTERFACE:${PROJECT_SOURCE_DIR}/include>")
+target_compile_features(echofmt INTERFACE cxx_std_20)
