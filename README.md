@@ -1,6 +1,6 @@
 # EchoFmt
 
-一个C++格式化的库，为了用更简单高效的使用方式替代`stdio`和`iostream`。
+一个C++格式化的库，用更简单高效的使用方式替代`stdio`和`iostream`。
 
 这个项目的意义是为了参考和学习[fmt](https://github.com/fmtlib/fmt)，从中理解基本实现原理，并封装一个功能更简单的格式化库。
 
