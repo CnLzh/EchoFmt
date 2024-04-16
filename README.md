@@ -16,11 +16,15 @@
 
 ## 构建
 
-这是一个head-only的库， 使用 `git clone https://github.com/CnLzh/EchoFmt.git` 拷贝该项目，并拷贝`include`中的头文件即可使用。
+这是一个head-only的库， 使用 `git clone https://github.com/CnLzh/EchoFmt.git` 拷贝该项目，并直接包含`include`中的头文件即可使用。
 
-或使用CMake子项目添加到项目中：
+或使用CMake添加到项目中：
 
 ```
 add_subdirectory(echofmt)
 target_link_libraries(YourProject PRIVATE echofmt::echofmt)
 ```
+
+## 测试
+
+该项目依赖[googletest](https://github.com/google/googletest)和[benchmark](https://github.com/google/benchmark)进行测试。
