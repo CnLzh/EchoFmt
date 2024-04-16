@@ -41,5 +41,5 @@ cmake  -DECHOFMT_BUILD_TESTS=ON  -DECHOFMT_BUILD_BENCHMARKS=ON ..
 sudo make
 ```
 
-这将会生成`echo_fmt_tests`和`echo_fmt_benchmark`可执行文件。你可以在`build`文件夹中找到并执行它们，或者使用`ctest -V`通过CMake的测试驱动程序执行`echo_fmt_tests`进行测试。
+这将会生成`echo_fmt_test`和`echo_fmt_benchmark`可执行文件。你可以在`build`文件夹中找到并执行它们，或者使用`ctest -V`通过CMake的测试驱动程序执行`echo_fmt_tests`进行测试。
 
