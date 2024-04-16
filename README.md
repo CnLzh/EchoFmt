@@ -11,6 +11,7 @@
 以下是项目开发所使用的环境：
 
 - OS: Ubuntu 22.04 LTS
+- Architecture: x86_64
 - CMake: 3.28.4
 - Toolchain: LLVM 18.1.2
 
