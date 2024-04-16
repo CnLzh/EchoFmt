@@ -36,6 +36,8 @@
 #define ECHO_CONSTEXPR 0
 #endif
 
+#include <string>
+
 namespace echofmt {
 
 template<bool X, typename T = void>

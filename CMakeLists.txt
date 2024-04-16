@@ -10,11 +10,13 @@ if (BUILD_SHARED_LIBS)
     add_compile_options(-fvisibility=hidden)
 endif (BUILD_SHARED_LIBS)
 
+message(STATUS "Using toolchain file: ${CMAKE_TOOLCHAIN_FILE}")
+
 # googletest
-option(ECHOFMT_BUILD_TESTS "Build EchoFmt unit tests" ON)
+option(ECHOFMT_BUILD_TESTS "Build EchoFmt unit tests" OFF)
 
 # benchmark
-option(ECHOFMT_BUILD_BENCHMARKS "Build EchoFmt benchmarks" ON)
+option(ECHOFMT_BUILD_BENCHMARKS "Build EchoFmt benchmarks" OFF)
 
 # 检查编译器是否支持忽略字段初始化的警告
 include(CheckCXXCompilerFlag)
@@ -43,16 +45,16 @@ if (ECHOFMT_BUILD_TESTS)
     # 如果不编译为动态库，则编译单元测试文件
     if (NOT BUILD_SHARED_LIBS)
         # 添加测试可执行文件
-        add_executable(echo_fmt_tests "")
+        add_executable(echo_fmt_test "")
         # 添加全部测试文件
-        target_sources(echo_fmt_tests
+        target_sources(echo_fmt_test
                 PRIVATE
                 tests/test.cc
         )
         # 链接
-        target_link_libraries(echo_fmt_tests gmock gtest gtest_main)
+        target_link_libraries(echo_fmt_test gmock gtest gtest_main)
         # 添加到cmake
-        add_test(NAME "echo_fmt_tests" COMMAND "echo_fmt_tests")
+        add_test(NAME "echo_fmt_test" COMMAND "echo_fmt_test")
     endif (NOT BUILD_SHARED_LIBS)
 endif (ECHOFMT_BUILD_TESTS)
 
@@ -125,10 +127,72 @@ if (ECHOFMT_BUILD_BENCHMARKS)
     endif (NOT BUILD_SHARED_LIBS)
 endif (ECHOFMT_BUILD_BENCHMARKS)
 
-# library
+# 安装
+include(GNUInstallDirs)
+include(CMakePackageConfigHelpers)
+
+set(echofmt_include_directory ${CMAKE_INSTALL_INCLUDEDIR}/echofmt)
+set(echofmt_cmake_directory ${CMAKE_INSTALL_LIBDIR}/cmake/echofmt)
+
+set(echofmt_version_config ${PROJECT_BINARY_DIR}/echofmt-config-version.cmake)
+set(echofmt_project_config ${PROJECT_BINARY_DIR}/echofmt-config.cmake)
+set(echofmt_targets echofmt-targets)
+
+# 指定head-only库
 add_library(echofmt INTERFACE)
 add_library(echofmt::echofmt ALIAS echofmt)
-target_include_directories(echofmt
-        INTERFACE
-        "$<BUILD_INTERFACE:${PROJECT_SOURCE_DIR}/include>")
+
+# 指定C++版本
 target_compile_features(echofmt INTERFACE cxx_std_20)
+
+# 指定包含的头文件路径
+target_include_directories(
+        echofmt
+        INTERFACE
+        $<BUILD_INTERFACE:${PROJECT_SOURCE_DIR}/include>
+)
+
+# 设置安装路径和导出集
+install(
+        TARGETS echofmt
+        EXPORT ${echofmt_targets}
+        ARCHIVE DESTINATION ${CMAKE_INSTALL_LIBDIR}
+        LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}
+        INCLUDES DESTINATION ${CMKAE_INSTALLL_INCLUDEDIR}
+)
+
+# 安装头文件
+install(
+        DIRECTORY ${PROJECT_SOURCE_DIR}/include/
+        DESTINATION ${echofmt_include_directory}
+)
+
+# 生成导出文件
+install(
+        EXPORT ${echofmt_targets}
+        FILE ${echofmt_targets}.cmake
+        NAMESPACE echofmt::
+        DESTINATION ${echofmt_cmake_directory}
+)
+
+# 版本配置信息
+write_basic_package_version_file(
+        ${echofmt_version_config}
+        VERSION ${PROJECT_VERSION}
+        COMPATIBILITY AnyNewerVersion
+)
+
+# 项目配置信息
+configure_package_config_file(
+        ${PROJECT_SOURCE_DIR}/support/cmake/echofmt-config.cmake.in
+        ${echofmt_project_config}
+        INSTALL_DESTINATION ${echofmt_cmake_directory}
+)
+
+# 安装配置文件
+install(
+        FILES
+        ${echofmt_project_config}
+        ${echofmt_version_config}
+        DESTINATION ${echofmt_cmake_directory}
+)
