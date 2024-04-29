@@ -2,6 +2,7 @@
 #define ECHO_FMT_INCLUDE_BASE_DEFINE_H_
 
 #include <type_traits>
+#include <string>
 
 // Clang
 #if defined(__clang__)
@@ -11,7 +12,7 @@
 #endif
 
 // GCC
-#if defined(__GUNC__)
+#if defined(__GUNC__) && !defined(__clang__)
 #define ECHO_GCC_VERSION (__GUNC__ * 100 + __GUNC_MINOR__)
 #else
 #define ECHO_GCC_VERSION 0
@@ -30,13 +31,43 @@
 #define ECHO_INLINE inline
 #endif
 
-#if defined(__cpp_if_constexpr)
-#define ECHO_CONSTEXPR constexpr
-#else
-#define ECHO_CONSTEXPR 0
-#endif
+namespace detail {
 
-#include <string>
+// 数据类型枚举
+enum class Type {
+  kNone,
+  kInt,
+  kUInt,
+  kLongLong,
+  kULongLong,
+  kInt128,
+  kUInt128,
+  kBool,
+  kChar,
+  kLastInteger = kChar,
+  kFloat,
+  kDouble,
+  kLongDouble.
+  kLastNumeric = kLongDouble,
+  kCString,
+  kString,
+  kPointer,
+  kCustom
+};
+
+template<typename T, typename C>
+struct type_constant : std::integral_constant<Type, Type::kCustom> {};
+
+#define ECHO_TYPE_CONSTANT(type, constant) \
+template<typename C>                       \
+struct type_constant<type, C> : std::integral_constant<Type, Type::constant>{}
+
+ECHO_TYPE_CONSTANT(int, kInt);
+ECHO_TYPE_CONSTANT(unsigned, kUInt);
+ECHO_TYPE_CONSTANT(long long, kLongLong);
+ECHO_TYPE_CONSTANT(unsigned long long, kULongLong);
+
+}
 
 namespace echofmt {
 
